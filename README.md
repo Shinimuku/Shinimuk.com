@@ -10,85 +10,61 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
         }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-        }
-        #chat-box {
-            width: 80%;
+        .chat-container {
+            max-width: 800px;
             margin: 20px auto;
+            padding: 20px;
             border: 1px solid #ccc;
-            padding: 10px;
-            background-color: #fff;
-            overflow-y: scroll;
-            height: 300px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
         }
-        #input-box {
-            width: 80%;
-            margin: 0 auto;
-            text-align: center;
+        #message-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+        #message-list li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        #message-list li:nth-child(odd) {
+            background-color: #f2f2f2;
         }
         #message-input {
-            width: 70%;
-            padding: 5px;
+            width: calc(100% - 20px);
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
-        #send-button {
-            width: 20%;
-            padding: 5px;
+        #submit-button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
             background-color: #333;
             color: #fff;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
-        }
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 20px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Переговоры</h1>
-    </header>
-    <div id="chat-box"></div>
-    <div id="input-box">
-        <input type="text" id="message-input" placeholder="Введите сообщение...">
-        <button id="send-button">Отправить</button>
+    <div class="chat-container">
+        <ul id="message-list">
+            <!-- Здесь будут отображаться сообщения -->
+        </ul>
+        <input type="text" id="message-input" placeholder="Введите ваше сообщение...">
+        <button id="submit-button">Отправить</button>
     </div>
-    <footer>
-        <p>&copy; 2024 Сайт для переговоров. Все права защищены.</p>
-    </footer>
+
     <script>
-        const chatBox = document.getElementById('chat-box');
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
-
-        function sendMessage() {
-            const message = messageInput.value.trim();
-            if (message !== '') {
-                const messageElement = document.createElement('div');
-                messageElement.textContent = message;
-                chatBox.appendChild(messageElement);
-                chatBox.scrollTop = chatBox.scrollHeight;
-                messageInput.value = '';
-            }
-        }
-
-        sendButton.addEventListener('click', sendMessage);
-        messageInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        });
+        // JavaScript код для отправки и отображения сообщений
     </script>
 </body>
 </html>
