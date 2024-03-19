@@ -55,6 +55,58 @@
     </style>
 </head>
 <body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сайт для переговоров</title>
+    <style>
+        /* Стили CSS */
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <ul id="message-list">
+            <!-- Здесь будут отображаться сообщения -->
+        </ul>
+        <input type="text" id="message-input" placeholder="Введите ваше сообщение...">
+        <button id="submit-button">Отправить</button>
+    </div>
+
+    <script>
+        // JavaScript код для отправки и отображения сообщений
+
+        // Функция для отправки сообщения
+        function sendMessage() {
+            // Получаем текст сообщения из поля ввода
+            var message = document.getElementById("message-input").value;
+            
+            // Если сообщение не пустое, добавляем его в список сообщений
+            if (message.trim() !== "") {
+                var messageList = document.getElementById("message-list");
+                var listItem = document.createElement("li");
+                listItem.textContent = message;
+                messageList.appendChild(listItem);
+
+                // Очищаем поле ввода после отправки сообщения
+                document.getElementById("message-input").value = "";
+            }
+        }
+
+        // Обработчик клика по кнопке отправки сообщения
+        document.getElementById("submit-button").addEventListener("click", sendMessage);
+
+        // Дополнительно: обработка нажатия Enter в поле ввода
+        document.getElementById("message-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
+
     <div class="chat-container">
         <ul id="message-list">
             <!-- Здесь будут отображаться сообщения -->
