@@ -1,111 +1,90 @@
-# Shinimuk.com
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сайт для переговоров</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .chat-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        #message-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            overflow-y: auto;
-            max-height: 300px;
-        }
-        #message-list li {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #fff;
-        }
-        #message-list li:nth-child(odd) {
-            background-color: #f2f2f2;
-        }
-        #message-input {
-            width: calc(100% - 20px);
-            margin-top: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        #submit-button {
-            width: 100%;
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сайт для переговоров</title>
-    <style>
-        /* Стили CSS */
-    </style>
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="chat-container">
-        <ul id="message-list">
-            <!-- Здесь будут отображаться сообщения -->
-        </ul>
-        <input type="text" id="message-input" placeholder="Введите ваше сообщение...">
-        <button id="submit-button">Отправить</button>
+        <ul id="messages"></ul>
+        <form id="form" action="">
+            <input id="input" autocomplete="off" /><button>Send</button>
+        </form>
     </div>
 
-    <script>
-        // JavaScript код для отправки и отображения сообщений
-
-        // Функция для отправки сообщения
-        function sendMessage() {
-            // Получаем текст сообщения из поля ввода
-            var message = document.getElementById("message-input").value;
-            
-            // Если сообщение не пустое, добавляем его в список сообщений
-            if (message.trim() !== "") {
-                var messageList = document.getElementById("message-list");
-                var listItem = document.createElement("li");
-                listItem.textContent = message;
-                messageList.appendChild(listItem);
-
-                // Очищаем поле ввода после отправки сообщения
-                document.getElementById("message-input").value = "";
-            }
-        }
-
-        // Обработчик клика по кнопке отправки сообщения
-        document.getElementById("submit-button").addEventListener("click", sendMessage);
-
-        // Дополнительно: обработка нажатия Enter в поле ввода
-        document.getElementById("message-input").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                sendMessage();
-            }
-        });
-    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
+body, html {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+.chat-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+#messages {
+    list-style-type: none;
+    padding: 0;
+}
+
+#messages li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+}
+
+#messages li:nth-child(odd) {
+    background-color: #e6e6e6;
+}
+
+form {
+    margin-top: 20px;
+}
+
+form input {
+    padding: 10px;
+    width: calc(100% - 70px);
+}
+
+form button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+const socket = io();
+
+const form = document.querySelector('form');
+const input = document.querySelector('#input');
+const messages = document.querySelector('#messages');
+
+form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (input.value) {
+        socket.emit('chat message', input.value);
+        input.value = '';
+    }
+});
+
+socket.on('chat message', function(msg) {
+    const item = document.createElement('li');
+    item.textContent = msg;
+    messages.appendChild(item);
+});
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
@@ -113,32 +92,19 @@ const io = require('socket.io')(http);
 
 app.use(express.static('public'));
 
-io.on('connection', (socket) => {
+io.on('connection', function(socket) {
     console.log('a user connected');
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', function() {
         console.log('user disconnected');
     });
 
-    socket.on('chat message', (msg) => {
+    socket.on('chat message', function(msg) {
         io.emit('chat message', msg);
     });
 });
 
-http.listen(3000, () => {
-    console.log('listening on *:3000');
+const PORT = process.env.PORT || 3000;
+http.listen(PORT, function() {
+    console.log(`listening on *:${PORT}`);
 });
-
-    <div class="chat-container">
-        <ul id="message-list">
-            <!-- Здесь будут отображаться сообщения -->
-        </ul>
-        <input type="text" id="message-input" placeholder="Введите ваше сообщение...">
-        <button id="submit-button">Отправить</button>
-    </div>
-
-    <script>
-        // JavaScript код для отправки и отображения сообщений
-    </script>
-</body>
-</html>
